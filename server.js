@@ -9,10 +9,13 @@ const app = express()
 
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://agridrone-client-git-main-chandana-99-borigorlas-projects.vercel.app'
-  ],
+  origin: function (origin, callback) {
+    if (!origin || origin.includes('vercel.app') || origin.includes('localhost')) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true
 }))
 app.use(express.json())
